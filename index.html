@@ -441,6 +441,57 @@
   </form>
 </section>
 
+<!-- Modal do Painel Admin -->
+<div id="adminModal" class="custom-modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2 class="section-title">Adicionar <em>Projeto</em></h2>
+    <form id="adminForm" style="margin-top: 30px;">
+      <div class="form-group">
+        <label>Título do Bloco (ex: Quarto)</label>
+        <input type="text" id="projTitle" required>
+      </div>
+      <div class="form-group">
+        <label>Descrição Curta (Subtítulo)</label>
+        <input type="text" id="projDesc" required>
+      </div>
+      <div class="form-group">
+        <label>Informações do Ambiente</label>
+        <textarea id="projInfo" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Link Externo (Opcional)</label>
+        <input type="url" id="projLink" placeholder="https://...">
+      </div>
+      <div class="form-group">
+        <label>URLs das Imagens (Separadas por vírgula)</label>
+        <textarea id="projImages" placeholder="url1.jpg, url2.jpg" required></textarea>
+      </div>
+      <button type="submit" class="form-submit">Criar Bloco</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de Visualização do Projeto -->
+<div id="projectModal" class="custom-modal project-view-modal">
+  <div class="modal-content project-card-content">
+    <span class="close-btn project-close-btn">&times;</span>
+    <div class="project-modal-grid">
+      <!-- Lado Esquerdo: Carrossel -->
+      <div class="carousel-container">
+        <img id="mainCarouselImg" src="" alt="Imagem Principal">
+        <div class="thumbnails" id="carouselThumbnails"></div>
+      </div>
+      <!-- Lado Direito: Informações -->
+      <div class="project-info-side">
+        <h2 id="modalProjTitle" class="section-title"></h2>
+        <p id="modalProjInfo" class="service-desc" style="color: var(--taupe); line-height: 1.8;"></p>
+        <a id="modalProjLink" href="#" target="_blank" class="hero-cta" style="margin-top: 10px; width: fit-content;">Acessar Link</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="footer-logo">Cintia <span>Bergamasco</span></div>
   <p class="footer-copy">&copy; 2026 Cintia Bergamasco - Design de Interiores</p>

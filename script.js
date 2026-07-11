@@ -214,3 +214,150 @@ if (formStatus) {
     formStatus.classList.add("is-visible");
   }
 }
+
+// Substitua a lógica antiga do adminBtn por esta:
+
+const adminModal = document.getElementById('adminModal');
+const projectModal = document.getElementById('projectModal');
+const adminForm = document.getElementById('adminForm');
+const projectGrid = document.querySelector('.project-grid');
+
+// Função para fechar os modais
+const closeModals = () => {
+  adminModal.style.display = 'none';
+  projectModal.style.display = 'none';
+  
+  // Limpa a URL para esconder o parâmetro admin após fechar, se desejar
+  const url = new URL(window.location);
+  url.searchParams.delete('admin');
+  window.history.pushState({}, '', url);
+};
+
+// Verificação de Segurança Básica (Apenas Front-end)
+window.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  
+  if (urlParams.get('admin') === 'true') {
+    // Pede a senha usando um prompt padrão do navegador
+    const senhaDigitada = prompt("Acesso Restrito. Digite a senha do administrador:");
+    
+    // DEFINA SUA SENHA AQUI (Lembre-se: visível no código-fonte)
+    const senhaCorreta = "CintiaDesign2026"; 
+    
+    if (senhaDigitada === senhaCorreta) {
+      adminModal.style.display = 'flex';
+    } else {
+      alert("Senha incorreta. Acesso negado.");
+      closeModals(); // Limpa a URL e não abre nada
+    }
+  }
+});
+
+// Fechar nos "X" ou clicando fora
+document.querySelectorAll('.close-btn').forEach(btn => {
+  btn.addEventListener('click', closeModals);
+});
+
+window.addEventListener('click', (e) => {
+  if (e.target === adminModal || e.target === projectModal) {
+    closeModals();
+  }
+});
+
+// Carregar projetos salvos
+let customProjects = JSON.parse(localStorage.getItem('projetosPortifolio')) || [];
+
+function renderCustomProjects() {
+  // Remove apenas os gerados dinamicamente para atualizar a lista
+  document.querySelectorAll('.custom-project').forEach(el => el.remove());
+  
+  customProjects.forEach((proj) => {
+    const card = document.createElement('a');
+    card.className = 'project-card custom-project reveal visible';
+    card.href = '#';
+    card.innerHTML = `
+      <div class="project-card-media">
+        <img src="${proj.images[0]}" alt="${proj.title}">
+      </div>
+      <div class="project-card-body">
+        <span class="project-index">Novo</span>
+        <h3>${proj.title}</h3>
+        <p>${proj.desc}</p>
+        <span class="project-page">Abrir Detalhes</span>
+      </div>
+    `;
+    
+    // Abrir o Modal de Projeto ao clicar
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      openProjectModal(proj);
+    });
+    
+    // Insere no grid existente
+    if (projectGrid) {
+      projectGrid.appendChild(card);
+    }
+  });
+}
+
+// Salvar um novo Projeto
+if (adminForm) {
+  adminForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const imagesStr = document.getElementById('projImages').value;
+    
+    const newProject = {
+      title: document.getElementById('projTitle').value,
+      desc: document.getElementById('projDesc').value,
+      info: document.getElementById('projInfo').value,
+      link: document.getElementById('projLink').value,
+      images: imagesStr.split(',').map(s => s.trim()).filter(s => s !== '')
+    };
+    
+    customProjects.push(newProject);
+    localStorage.setItem('projetosPortifolio', JSON.stringify(customProjects));
+    
+    adminForm.reset();
+    closeModals();
+    renderCustomProjects();
+  });
+}
+
+// Lógica de Renderização do Modal e Carrossel
+function openProjectModal(proj) {
+  document.getElementById('modalProjTitle').innerHTML = proj.title;
+  document.getElementById('modalProjInfo').innerHTML = proj.info.replace(/\n/g, '<br>');
+  
+  const linkBtn = document.getElementById('modalProjLink');
+  if(proj.link) {
+    linkBtn.style.display = 'inline-flex';
+    linkBtn.href = proj.link;
+  } else {
+    linkBtn.style.display = 'none';
+  }
+
+  const mainImg = document.getElementById('mainCarouselImg');
+  const thumbContainer = document.getElementById('carouselThumbnails');
+  
+  mainImg.src = proj.images[0] || '';
+  thumbContainer.innerHTML = '';
+  
+  proj.images.forEach((imgUrl, idx) => {
+    const thumb = document.createElement('img');
+    thumb.src = imgUrl;
+    if(idx === 0) thumb.classList.add('active');
+    
+    thumb.addEventListener('click', () => {
+      mainImg.src = imgUrl;
+      document.querySelectorAll('.thumbnails img').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+    });
+    
+    thumbContainer.appendChild(thumb);
+  });
+
+  projectModal.style.display = 'flex';
+}
+
+// Inicializar projetos criados pelo Admin
+renderCustomProjects();
