@@ -24,6 +24,65 @@
   </ul>
 </nav>
 
+<!-- ===== ADMIN PANEL (oculto inicialmente) ===== -->
+<section id="adminPanel" style="display:none; background:var(--deep); padding:60px 40px; border-bottom:2px solid var(--gold);">
+  <div class="admin-container" style="max-width:1400px; margin:0 auto;">
+    <h2 style="font-family:'Cormorant Garamond',serif; font-weight:300; color:var(--gold); font-size:2.5rem; margin-bottom:10px;">🛠️ Administração – Projetos</h2>
+    <p style="color:var(--taupe); margin-bottom:30px;">Gerencie os blocos do portfólio. As alterações são salvas na nuvem.</p>
+
+    <div style="display:grid; grid-template-columns:1fr 1.2fr; gap:40px;">
+      <!-- Lista de projetos -->
+      <div>
+        <h3 style="font-family:'Cormorant Garamond',serif; font-weight:300; color:var(--cream); margin-bottom:15px;">Projetos existentes</h3>
+        <div id="projectList" style="background:rgba(255,255,255,0.03); border:1px solid var(--line); padding:20px; max-height:60vh; overflow-y:auto;"></div>
+        <button id="btnNew" style="margin-top:15px; padding:12px 24px; border:1px solid var(--gold); background:transparent; color:var(--gold); font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; cursor:pointer; transition:0.3s;">+ Criar Novo</button>
+      </div>
+
+      <!-- Formulário -->
+      <div style="background:rgba(255,255,255,0.03); border:1px solid var(--line); padding:30px;">
+        <h3 id="formTitle" style="font-family:'Cormorant Garamond',serif; font-weight:300; color:var(--gold); font-size:1.8rem; margin-bottom:20px;">Novo Projeto</h3>
+        <form id="adminForm">
+          <input type="hidden" id="editId" value="">
+
+          <div class="form-group">
+            <label>Título</label>
+            <input type="text" id="projTitle" required>
+          </div>
+          <div class="form-group">
+            <label>Descrição curta (subtítulo)</label>
+            <input type="text" id="projDesc" required>
+          </div>
+          <div class="form-group">
+            <label>Informações detalhadas (suporta HTML)</label>
+            <textarea id="projInfo" rows="4"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Link externo (opcional)</label>
+            <input type="url" id="projLink" placeholder="https://...">
+          </div>
+
+          <!-- Imagens -->
+          <div class="form-group">
+            <label>Imagens do projeto</label>
+            <div id="uploadArea" style="border:1px dashed var(--line); padding:20px; text-align:center; cursor:pointer; transition:border-color 0.3s;">
+              <p>Clique para selecionar imagens (múltiplas)</p>
+              <input type="file" id="fileInput" accept="image/*" multiple style="display:none;">
+            </div>
+            <div id="imagePreviewList" style="display:flex; flex-direction:column; gap:12px; margin-top:15px;"></div>
+          </div>
+
+          <div style="display:flex; gap:16px; margin-top:10px; flex-wrap:wrap;">
+            <button type="submit" class="form-submit" id="saveBtn" style="padding:12px 32px;">Salvar Projeto</button>
+            <button type="button" id="previewBtn" style="padding:12px 32px; border:1px solid var(--taupe); background:transparent; color:var(--taupe); font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; cursor:pointer;">Visualizar Prévia</button>
+            <button type="button" id="cancelBtn" style="display:none; padding:12px 32px; border:1px solid #b8956a; background:transparent; color:#b8956a; font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; cursor:pointer;">Cancelar</button>
+          </div>
+          <div id="statusMsg" style="margin-top:15px; padding:10px; border:1px solid var(--gold); color:var(--gold); display:none;"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="hero" id="hero">
   <div class="hero-bg"></div>
   <div class="hero-line-v"></div>
@@ -242,6 +301,7 @@
   </div>
 </section>
 
+<!-- ===== SEÇÃO PORTFÓLIO (dinâmica) ===== -->
 <section class="portfolio" id="portfolio">
   <div class="portfolio-header">
     <div>
@@ -250,41 +310,24 @@
     </div>
     <a href="https://online.fliphtml5.com/kbrbj/rznn/#p=1" class="portfolio-link reveal" target="_blank" rel="noreferrer">Abrir flipbook completo</a>
   </div>
-
-  <!-- Grid populada dinamicamente pelo JavaScript -->
+  
   <div class="project-grid" id="projectGrid"></div>
+
 </section>
 
-<!-- Modal de visualização do projeto (já existente, mantido) -->
-<div id="projectModal" class="custom-modal project-view-modal">
-  <div class="modal-content project-card-content">
-    <span class="close-btn project-close-btn">&times;</span>
-    <div class="project-modal-grid">
-      <div class="carousel-container">
-        <img id="mainCarouselImg" src="" alt="Imagem Principal">
-        <div class="thumbnails" id="carouselThumbnails"></div>
-      </div>
-      <div class="project-info-side">
-        <h2 id="modalProjTitle" class="section-title"></h2>
-        <div id="modalProjInfo" class="service-desc" style="color: var(--taupe); line-height: 1.8;"></div>
-        <a id="modalProjLink" href="#" target="_blank" class="hero-cta" style="margin-top: 10px; width: fit-content;">Acessar Link</a>
-      </div>
-    </div>
-  </div>
-</div>
-
+<!-- Seção de acesso ao portfólio (mantida) -->
 <section class="portfolio-access" id="portfolio-access">
   <div class="portfolio-access-card reveal">
     <div class="portfolio-access-copy">
-      <p class="section-label">Acesso ao Portf&oacute;lio</p>
-      <h2 class="section-title">Disponibilize a vers&atilde;o completa para quem quiser ver o material na <em>&iacute;ntegra</em></h2>
-      <p>Foi adicionado um bloco dedicado para acesso ao portf&oacute;lio original, facilitando a navega&ccedil;&atilde;o de clientes, recrutadores e parceiros que desejarem visualizar todas as p&aacute;ginas do material.</p>
+      <p class="section-label">Acesso ao Portfólio</p>
+      <h2 class="section-title">Disponibilize a versão completa para quem quiser ver o material na <em>íntegra</em></h2>
+      <p>Foi adicionado um bloco dedicado para acesso ao portfólio original, facilitando a navegação de clientes, recrutadores e parceiros que desejarem visualizar todas as páginas do material.</p>
       <div class="portfolio-access-actions">
-        <a href="https://online.fliphtml5.com/kbrbj/rznn/#p=1" target="_blank" rel="noreferrer" class="hero-cta">Abrir Portf&oacute;lio</a>
+        <a href="https://online.fliphtml5.com/kbrbj/rznn/#p=1" target="_blank" rel="noreferrer" class="hero-cta">Abrir Portfólio</a>
       </div>
     </div>
     <div class="portfolio-access-preview">
-      <img src="https://online.fliphtml5.com/kbrbj/rznn/files/large/28ecaf6d7c5b118c791d10b07eaf3238.webp?1774227272" alt="Preview da capa do portf&oacute;lio">
+      <img src="https://online.fliphtml5.com/kbrbj/rznn/files/large/28ecaf6d7c5b118c791d10b07eaf3238.webp?1774227272" alt="Preview da capa do portfólio">
     </div>
   </div>
 </section>
@@ -407,21 +450,22 @@
   </div>
 </div>
 
-<!-- Modal de Visualização do Projeto -->
+<!-- ===== MODAL DE VISUALIZAÇÃO DO PROJETO ===== -->
 <div id="projectModal" class="custom-modal project-view-modal">
   <div class="modal-content project-card-content">
     <span class="close-btn project-close-btn">&times;</span>
     <div class="project-modal-grid">
-      <!-- Lado Esquerdo: Carrossel -->
+
       <div class="carousel-container">
         <img id="mainCarouselImg" src="" alt="Imagem Principal">
         <div class="thumbnails" id="carouselThumbnails"></div>
       </div>
-      <!-- Lado Direito: Informações -->
+
       <div class="project-info-side">
         <h2 id="modalProjTitle" class="section-title"></h2>
-        <p id="modalProjInfo" class="service-desc" style="color: var(--taupe); line-height: 1.8;"></p>
-        <a id="modalProjLink" href="#" target="_blank" class="hero-cta" style="margin-top: 10px; width: fit-content;">Acessar Link</a>
+        <div id="modalProjInfo" class="service-desc" style="color: var(--taupe); line-height: 1.8;"></div>
+        <div id="modalImageDesc" style="margin-top:20px; color:var(--cream); font-size:0.95rem; line-height:1.6; border-top:1px solid rgba(201,169,110,0.15); padding-top:15px;"></div>
+        <a id="modalProjLink" href="#" target="_blank" class="hero-cta" style="margin-top:10px; width:fit-content;">Acessar Link</a>
       </div>
     </div>
   </div>

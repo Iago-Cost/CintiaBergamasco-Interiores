@@ -1594,3 +1594,158 @@ body::after {
 }
 
 /* Estilos para o admin (serão incluídos no admin.html via <style>) */
+
+/* ===== Admin Panel ===== */
+#adminPanel .form-group {
+  margin-bottom: 22px;
+}
+#adminPanel .form-group label {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-bottom: 6px;
+}
+#adminPanel .form-group input,
+#adminPanel .form-group textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  padding: 10px 0;
+  color: var(--cream);
+  font-family: "Jost", sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  outline: none;
+  transition: border-color 0.3s;
+}
+#adminPanel .form-group input:focus,
+#adminPanel .form-group textarea:focus {
+  border-color: var(--gold);
+}
+#adminPanel .form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+#adminPanel #uploadArea {
+  border: 1px dashed var(--line);
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+#adminPanel #uploadArea:hover {
+  border-color: var(--gold);
+}
+#adminPanel .image-preview-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(255,255,255,0.04);
+  padding: 10px;
+  border: 1px solid var(--line);
+}
+#adminPanel .image-preview-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+#adminPanel .image-preview-item .desc-field {
+  flex: 1;
+}
+#adminPanel .image-preview-item .desc-field textarea {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--line);
+  padding: 6px;
+  color: var(--cream);
+  font-family: "Jost", sans-serif;
+  font-size: 0.85rem;
+  resize: vertical;
+  min-height: 50px;
+}
+#adminPanel .image-preview-item .remove-img {
+  background: transparent;
+  border: none;
+  color: #b8956a;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 8px;
+}
+#projectList .project-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+#projectList .project-item:last-child { border-bottom: none; }
+#projectList .project-item .info {
+  display: flex;
+  flex-direction: column;
+}
+#projectList .project-item .title {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.2rem;
+  color: var(--cream);
+}
+#projectList .project-item .desc {
+  font-size: 0.85rem;
+  color: var(--taupe);
+}
+#projectList .project-item .actions button {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 4px 12px;
+  margin-left: 8px;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.3s;
+  font-family: "Jost", sans-serif;
+}
+#projectList .project-item .actions button:hover {
+  background: var(--gold);
+  color: var(--charcoal);
+}
+#projectList .project-item .actions button.delete {
+  border-color: #b8956a;
+  color: #b8956a;
+}
+#projectList .project-item .actions button.delete:hover {
+  background: #b8956a;
+  color: var(--charcoal);
+}
+
+/* ===== Modal de visualização - sem scrollbar ===== */
+.project-view-modal .modal-content {
+  max-width: 950px;
+  padding: 50px;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+.project-view-modal .modal-content::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.project-modal-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 40px;
+  margin-top: 10px;
+  max-height: 70vh;
+}
+@media (max-width: 900px) {
+  .project-modal-grid {
+    grid-template-columns: 1fr;
+    max-height: none;
+  }
+  #mainCarouselImg { height: 300px; }
+  .project-view-modal .modal-content { padding: 30px 20px; }
+}
