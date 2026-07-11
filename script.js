@@ -1,39 +1,57 @@
 // ============================================================
-//  CONFIGURAÇÃO DO JSONBIN (substitua pelos seus dados)
+//  CONFIGURAÇÃO DO SUPABASE (substitua pelos seus dados)
 // ============================================================
-const JSONBIN_API_KEY = "$2a$10$Ou3.0Ar.8eJ.gahM1YYkh.hF.HoVVYODKliFBm2xUAsxn/58/eSbe";
-const JSONBIN_BIN_ID = "6a525ef74bc4bb5fc2e56d95";
-const BIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+const SUPABASE_URL = "https://sydaajqyxwyedbinoubt.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN5ZGFhanF5eHd5ZWRiaW5vdWJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3NzA3NDgsImV4cCI6MjA5OTM0Njc0OH0.m7vz1kp-brGFclrilB9AN5aqb-c3RSyZRvlcGNt6kDo";
 
 // ============================================================
-//  FUNÇÕES DE PERSISTÊNCIA
+//  CLIENTE SUPABASE
+// ============================================================
+const supabase = window.supabase?.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) || null;
+
+// ============================================================
+//  FUNÇÕES DE PERSISTÊNCIA (Supabase)
 // ============================================================
 async function carregarProjetos() {
+  if (!supabase) {
+    console.error("Supabase não inicializado. Verifique as credenciais.");
+    return [];
+  }
   try {
-    const response = await fetch(BIN_URL, {
-      headers: { 'X-Master-Key': JSONBIN_API_KEY }
-    });
-    const data = await response.json();
-    return data.record?.projetos || [];
-  } catch (error) {
-    console.error("Erro ao carregar projetos:", error);
+    const { data, error } = await supabase
+      .from('projetos')
+      .select('*')
+      .order('created_at', { ascending: true });
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.error("Erro ao carregar projetos:", err);
     return [];
   }
 }
 
 async function salvarProjetos(projetos) {
+  if (!supabase) {
+    console.error("Supabase não inicializado.");
+    return false;
+  }
   try {
-    await fetch(BIN_URL, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': JSONBIN_API_KEY
-      },
-      body: JSON.stringify({ projetos })
-    });
+    // Primeiro, deleta todos os registros existentes (para sincronizar)
+    const { error: deleteError } = await supabase
+      .from('projetos')
+      .delete()
+      .neq('id', ''); // deleta todos
+    if (deleteError) throw deleteError;
+
+    // Insere todos os projetos
+    const { error: insertError } = await supabase
+      .from('projetos')
+      .insert(projetos);
+    if (insertError) throw insertError;
+
     return true;
-  } catch (error) {
-    console.error("Erro ao salvar projetos:", error);
+  } catch (err) {
+    console.error("Erro ao salvar projetos:", err);
     return false;
   }
 }
@@ -86,10 +104,6 @@ window.addEventListener("scroll", () => {
   navbar.classList.toggle("scrolled", window.scrollY > 80);
 });
 
-
-
-
-
 const parallaxBg = document.getElementById("parallaxBg");
 const parallaxSection = document.getElementById("parallax");
 window.addEventListener("scroll", () => {
@@ -98,8 +112,6 @@ window.addEventListener("scroll", () => {
   const progress = -rect.top / (rect.height + window.innerHeight);
   parallaxBg.style.transform = `translateY(${progress * 60}px)`;
 });
-
-
 
 const reveals = document.querySelectorAll(".reveal");
 const observer = new IntersectionObserver(
@@ -210,11 +222,9 @@ if (urlParams.get('admin') === 'true') {
   const senha = prompt("Acesso Restrito. Digite a senha do administrador:");
   if (senha === "CintiaDesign2026") {
     adminPanel.style.display = "block";
-    // Forçar scroll para o admin
     adminPanel.scrollIntoView({ behavior: "smooth" });
   } else {
     alert("Senha incorreta. Acesso negado.");
-    // Remover parâmetro da URL
     const clean = new URL(window.location.href);
     clean.searchParams.delete("admin");
     window.history.replaceState({}, "", clean);
@@ -222,7 +232,7 @@ if (urlParams.get('admin') === 'true') {
 }
 
 // ============================================================
-//  GERENCIAMENTO DE PROJETOS (com JSONBin)
+//  GERENCIAMENTO DE PROJETOS (com Supabase)
 // ============================================================
 let projects = [];
 
@@ -247,11 +257,14 @@ const previewBtn = document.getElementById("previewBtn");
 // Estado das imagens
 let imageData = [];
 
-// ===== Carregar projetos do JSONBin =====
+// ===== Carregar projetos do Supabase =====
 async function loadProjects() {
-  projects = await carregarProjetos();
-  if (!projects || projects.length === 0) {
-    // Dados iniciais (exemplo)
+  // Mostra loading (opcional)
+  const loaded = await carregarProjetos();
+  if (loaded && loaded.length > 0) {
+    projects = loaded;
+  } else {
+    // Se não houver dados, cria projetos padrão
     projects = [
       { id: "p1", title: "Quarto", desc: "Estudo de ambiente residencial", info: "Ambiente tranquilo com iluminação natural.", link: "", images: [{ url: "https://online.fliphtml5.com/kbrbj/rznn/files/large/cd35dac653d9d420dbb732f9ae761d96.webp", description: "Vista geral do quarto" }] },
       { id: "p2", title: "Sala", desc: "Proposta para espaço de convivência", info: "Integração entre sala e jantar.", link: "", images: [{ url: "https://online.fliphtml5.com/kbrbj/rznn/files/large/2640ced1c386f5b948d3e2caadd3833a.webp", description: "Vista ampla" }] }
@@ -271,7 +284,6 @@ function renderProjects() {
     card.className = "project-card reveal visible";
     card.href = "#";
     card.setAttribute("data-id", proj.id);
-
     const cover = proj.images && proj.images.length > 0 ? proj.images[0].url : "";
     card.innerHTML = `
       <div class="project-card-media">
@@ -439,11 +451,12 @@ adminForm.addEventListener("submit", async (e) => {
   if (success) {
     statusMsg.textContent = "Projeto salvo com sucesso!";
     statusMsg.style.display = "block";
+    // Atualiza as visualizações
     renderProjects();
     renderAdminList();
     resetForm();
   } else {
-    statusMsg.textContent = "Erro ao salvar. Verifique sua conexão ou credenciais do JSONBin.";
+    statusMsg.textContent = "Erro ao salvar. Verifique sua conexão ou credenciais do Supabase.";
     statusMsg.style.display = "block";
   }
 });
@@ -473,7 +486,6 @@ previewBtn.addEventListener("click", () => {
   const link = projLink.value.trim();
   const firstImg = imageData.length > 0 ? imageData[0].url : "";
 
-  // Abrir modal de prévia (usando o mesmo modal de visualização)
   document.getElementById("modalProjTitle").innerHTML = title;
   document.getElementById("modalProjInfo").innerHTML = info.replace(/\n/g, "<br>");
   document.getElementById("modalImageDesc").innerHTML = imageData.length > 0 ? imageData[0].description : "";
@@ -485,7 +497,6 @@ previewBtn.addEventListener("click", () => {
   } else {
     linkEl.style.display = "none";
   }
-  // Preencher miniaturas
   const thumbContainer = document.getElementById("carouselThumbnails");
   thumbContainer.innerHTML = "";
   imageData.forEach((img, idx) => {
