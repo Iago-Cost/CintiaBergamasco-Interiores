@@ -1,9 +1,7 @@
+// ===== Cursor personalizado (mantido) =====
 const cursor = document.getElementById("cursor");
 const cursorRing = document.getElementById("cursorRing");
-let mouseX = 0;
-let mouseY = 0;
-let ringX = 0;
-let ringY = 0;
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
 if (cursor && cursorRing) {
   document.addEventListener("mousemove", (event) => {
@@ -20,19 +18,16 @@ if (cursor && cursorRing) {
     cursorRing.style.top = `${ringY}px`;
     requestAnimationFrame(animateRing);
   }
-
   animateRing();
 
-  document
-    .querySelectorAll("a, button, .service-card, .project-card, .skill-card, .portfolio-access-card")
-    .forEach((element) => {
-      element.addEventListener("mouseenter", () => {
+  document.querySelectorAll("a, button, .service-card, .project-card, .skill-card, .portfolio-access-card")
+    .forEach((el) => {
+      el.addEventListener("mouseenter", () => {
         cursor.style.transform = "scale(3)";
         cursorRing.style.transform = "scale(1.5)";
         cursorRing.style.opacity = "0.3";
       });
-
-      element.addEventListener("mouseleave", () => {
+      el.addEventListener("mouseleave", () => {
         cursor.style.transform = "scale(1)";
         cursorRing.style.transform = "scale(1)";
         cursorRing.style.opacity = "0.6";
@@ -40,115 +35,82 @@ if (cursor && cursorRing) {
     });
 }
 
+// ===== Navbar scroll =====
 const navbar = document.getElementById("navbar");
 window.addEventListener("scroll", () => {
-  if (!navbar) {
-    return;
-  }
-
-  if (window.scrollY > 80) {
-    navbar.classList.add("scrolled");
-  } else {
-    navbar.classList.remove("scrolled");
-  }
+  if (!navbar) return;
+  navbar.classList.toggle("scrolled", window.scrollY > 80);
 });
 
+// ===== Parallax =====
 const parallaxBg = document.getElementById("parallaxBg");
 const parallaxSection = document.getElementById("parallax");
 window.addEventListener("scroll", () => {
-  if (!parallaxBg || !parallaxSection) {
-    return;
-  }
-
+  if (!parallaxBg || !parallaxSection) return;
   const rect = parallaxSection.getBoundingClientRect();
   const progress = -rect.top / (rect.height + window.innerHeight);
   parallaxBg.style.transform = `translateY(${progress * 60}px)`;
 });
 
+// ===== Reveal animations =====
 const reveals = document.querySelectorAll(".reveal");
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-      }
+      if (entry.isIntersecting) entry.target.classList.add("visible");
     });
   },
   { threshold: 0.1, rootMargin: "0px 0px -60px 0px" }
 );
+reveals.forEach(el => observer.observe(el));
 
-reveals.forEach((element) => observer.observe(element));
-
+// ===== Hero scroll effect =====
 const heroContent = document.querySelector(".hero-content");
 const heroImg = document.querySelector(".hero-image-float img");
 window.addEventListener("scroll", () => {
-  const scrollAmount = window.scrollY;
-
-  if (scrollAmount < window.innerHeight && heroContent) {
-    heroContent.style.transform = `translateY(${scrollAmount * 0.25}px)`;
+  const s = window.scrollY;
+  if (s < window.innerHeight && heroContent) {
+    heroContent.style.transform = `translateY(${s * 0.25}px)`;
   }
-
-  if (scrollAmount < window.innerHeight && heroImg) {
-    heroImg.style.transform = `scale(1.1) translateY(${scrollAmount * 0.12}px)`;
+  if (s < window.innerHeight && heroImg) {
+    heroImg.style.transform = `scale(1.1) translateY(${s * 0.12}px)`;
   }
 });
 
-function animateCounter(element, target) {
+// ===== Contador de estatísticas (mantido) =====
+function animateCounter(el, target) {
   let current = 0;
   const step = target / 60;
   const timer = setInterval(() => {
     current += step;
-
-    if (current >= target) {
-      current = target;
-      clearInterval(timer);
-    }
-
-    element.textContent = `${Math.round(current)}${element.dataset.suffix || ""}`;
+    if (current >= target) { current = target; clearInterval(timer); }
+    el.textContent = `${Math.round(current)}${el.dataset.suffix || ""}`;
   }, 16);
 }
-
 const statsSection = document.querySelector(".philosophy-stats");
-const statsObserver = new IntersectionObserver(
-  (entries) => {
+if (statsSection) {
+  const statsObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (!entry.isIntersecting || entry.target.dataset.animated) {
-        return;
-      }
-
+      if (!entry.isIntersecting || entry.target.dataset.animated) return;
       entry.target.dataset.animated = "true";
-
-      const numbers = entry.target.querySelectorAll(".stat-num");
-      numbers.forEach((numberElement) => {
-        const text = numberElement.textContent.trim();
-
-        if (!/\d/.test(text)) {
-          return;
-        }
-
+      entry.target.querySelectorAll(".stat-num").forEach(num => {
+        const text = num.textContent.trim();
+        if (!/\d/.test(text)) return;
         const number = parseInt(text, 10);
         const suffix = text.replace(/\d+/g, "");
-
-        if (Number.isNaN(number)) {
-          return;
-        }
-
-        numberElement.dataset.suffix = suffix;
-        animateCounter(numberElement, number);
+        if (isNaN(number)) return;
+        num.dataset.suffix = suffix;
+        animateCounter(num, number);
       });
     });
-  },
-  { threshold: 0.5 }
-);
-
-if (statsSection) {
+  }, { threshold: 0.5 });
   statsObserver.observe(statsSection);
 }
 
+// ===== Formulário de contato (mantido) =====
 const contactForm = document.getElementById("contactForm");
 const formNextUrl = document.getElementById("formNextUrl");
 const formStatus = document.getElementById("formStatus");
-
 if (contactForm && formNextUrl) {
   const successUrl = new URL(window.location.href);
   successUrl.hash = "contato";
@@ -158,206 +120,219 @@ if (contactForm && formNextUrl) {
   contactForm.addEventListener("submit", (event) => {
     if (window.location.protocol === "file:") {
       event.preventDefault();
-
-      const formData = new FormData(contactForm);
+      const fd = new FormData(contactForm);
       const recipient = contactForm.action.replace("https://formsubmit.co/", "").trim();
-      const name = formData.get("Nome") || "";
-      const email = formData.get("email") || "";
-      const phone = formData.get("Telefone") || "";
-      const projectType = formData.get("Tipo de Projeto") || "";
-      const message = formData.get("Mensagem") || "";
       const subject = "Teste de contato pelo site - Cintia Bergamasco";
-      const bodyLines = [
-        "Novo contato pelo site:",
-        "",
-        `Nome: ${name}`,
-        `Email: ${email}`,
-        `Telefone: ${phone}`,
-        `Tipo de Projeto: ${projectType}`,
-        "",
-        "Mensagem:",
-        message
-      ];
-      const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join("\n"))}`;
-
+      const body = `Nome: ${fd.get("Nome")}\nEmail: ${fd.get("email")}\nTelefone: ${fd.get("Telefone")}\nTipo: ${fd.get("Tipo de Projeto")}\n\nMensagem:\n${fd.get("Mensagem")}`;
+      window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       if (formStatus) {
-        formStatus.textContent = "Teste local detectado. Vamos abrir seu aplicativo de e-mail com a mensagem preenchida.";
+        formStatus.textContent = "Teste local: seu aplicativo de e-mail será aberto.";
         formStatus.classList.add("is-visible");
       }
-
-      window.location.href = mailtoUrl;
       return;
     }
-
-    const submitButton = contactForm.querySelector(".form-submit");
-
-    if (submitButton) {
-      submitButton.textContent = "Enviando...";
-      submitButton.disabled = true;
-    }
+    const btn = contactForm.querySelector(".form-submit");
+    if (btn) { btn.textContent = "Enviando..."; btn.disabled = true; }
   });
 }
-
 if (formStatus) {
   const params = new URLSearchParams(window.location.search);
-  const wasSent = params.get("enviado");
-
-  if (wasSent === "1") {
-    formStatus.textContent = "Mensagem enviada com sucesso. A Cintia recebera o contato no e-mail cadastrado.";
+  if (params.get("enviado") === "1") {
+    formStatus.textContent = "Mensagem enviada com sucesso. A Cintia receberá o contato no e-mail cadastrado.";
     formStatus.classList.add("is-visible", "is-success");
-
-    const cleanUrl = new URL(window.location.href);
-    cleanUrl.searchParams.delete("enviado");
-    window.history.replaceState({}, "", cleanUrl.toString());
+    const clean = new URL(window.location.href);
+    clean.searchParams.delete("enviado");
+    window.history.replaceState({}, "", clean);
   } else if (window.location.protocol === "file:") {
-    formStatus.textContent = "Modo de teste local ativo. Ao enviar, o site abrira seu aplicativo de e-mail com a mensagem pronta.";
+    formStatus.textContent = "Modo de teste local ativo. Ao enviar, o site abrirá seu aplicativo de e-mail com a mensagem pronta.";
     formStatus.classList.add("is-visible");
   }
 }
 
-// Substitua a lógica antiga do adminBtn por esta:
+// ============================================================
+//  GERENCIAMENTO DE PROJETOS (localStorage + renderização)
+// ============================================================
 
-const adminModal = document.getElementById('adminModal');
-const projectModal = document.getElementById('projectModal');
-const adminForm = document.getElementById('adminForm');
-const projectGrid = document.querySelector('.project-grid');
+// Dados padrão (caso não haja nada salvo)
+const DEFAULT_PROJECTS = [
+  {
+    id: "proj1",
+    title: "Quarto",
+    desc: "Estudo de ambiente residencial",
+    info: "Ambiente tranquilo com iluminação natural e materiais aconchegantes.",
+    link: "https://online.fliphtml5.com/kbrbj/rznn/#p=4",
+    images: [
+      { url: "https://online.fliphtml5.com/kbrbj/rznn/files/large/cd35dac653d9d420dbb732f9ae761d96.webp", description: "Vista geral do quarto com cama e decoração." },
+      { url: "https://online.fliphtml5.com/kbrbj/rznn/files/large/2640ced1c386f5b948d3e2caadd3833a.webp", description: "Detalhe da iluminação e texturas." }
+    ]
+  },
+  {
+    id: "proj2",
+    title: "Sala",
+    desc: "Proposta para espaço de convivência",
+    info: "Integração entre sala de estar e jantar, com sofás modulares e acabamentos em madeira.",
+    link: "https://online.fliphtml5.com/kbrbj/rznn/#p=6",
+    images: [
+      { url: "https://online.fliphtml5.com/kbrbj/rznn/files/large/2640ced1c386f5b948d3e2caadd3833a.webp", description: "Vista ampla da sala." }
+    ]
+  },
+  // ... adicione os outros projetos padrão (Cozinha, Apartamento, etc.) 
+  // para manter a consistência, mas o usuário poderá deletar/editar todos.
+];
 
-// Função para fechar os modais
-const closeModals = () => {
-  adminModal.style.display = 'none';
-  projectModal.style.display = 'none';
-  
-  // Limpa a URL para esconder o parâmetro admin após fechar, se desejar
-  const url = new URL(window.location);
-  url.searchParams.delete('admin');
-  window.history.pushState({}, '', url);
-};
-
-// Verificação de Segurança Básica (Apenas Front-end)
-window.addEventListener('DOMContentLoaded', () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  
-  if (urlParams.get('admin') === 'true') {
-    // Pede a senha usando um prompt padrão do navegador
-    const senhaDigitada = prompt("Acesso Restrito. Digite a senha do administrador:");
-    
-    // DEFINA SUA SENHA AQUI (Lembre-se: visível no código-fonte)
-    const senhaCorreta = "CintiaDesign2026"; 
-    
-    if (senhaDigitada === senhaCorreta) {
-      adminModal.style.display = 'flex';
-    } else {
-      alert("Senha incorreta. Acesso negado.");
-      closeModals(); // Limpa a URL e não abre nada
-    }
+// Carregar projetos do localStorage ou usar os padrão
+let projects = [];
+const stored = localStorage.getItem("projetosPortifolio");
+if (stored) {
+  try {
+    projects = JSON.parse(stored);
+  } catch (e) {
+    projects = [...DEFAULT_PROJECTS];
   }
-});
+} else {
+  projects = [...DEFAULT_PROJECTS];
+  localStorage.setItem("projetosPortifolio", JSON.stringify(projects));
+}
 
-// Fechar nos "X" ou clicando fora
-document.querySelectorAll('.close-btn').forEach(btn => {
-  btn.addEventListener('click', closeModals);
-});
+// ===== Renderizar os cards na grade =====
+const projectGrid = document.getElementById("projectGrid");
 
-window.addEventListener('click', (e) => {
-  if (e.target === adminModal || e.target === projectModal) {
-    closeModals();
-  }
-});
-
-// Carregar projetos salvos
-let customProjects = JSON.parse(localStorage.getItem('projetosPortifolio')) || [];
-
-function renderCustomProjects() {
-  // Remove apenas os gerados dinamicamente para atualizar a lista
-  document.querySelectorAll('.custom-project').forEach(el => el.remove());
-  
-  customProjects.forEach((proj) => {
-    const card = document.createElement('a');
-    card.className = 'project-card custom-project reveal visible';
-    card.href = '#';
+function renderProjects() {
+  if (!projectGrid) return;
+  projectGrid.innerHTML = "";
+  projects.forEach((proj, index) => {
+    const card = document.createElement("a");
+    card.className = "project-card reveal visible";
+    card.href = "#";
+    card.setAttribute("data-id", proj.id);
+    // Usar a primeira imagem como capa
+    const cover = proj.images && proj.images.length > 0 ? proj.images[0].url : "";
     card.innerHTML = `
       <div class="project-card-media">
-        <img src="${proj.images[0]}" alt="${proj.title}">
+        <img src="${cover}" alt="${proj.title}">
       </div>
       <div class="project-card-body">
-        <span class="project-index">Novo</span>
+        <span class="project-index">Projeto ${String(index + 1).padStart(2, "0")}</span>
         <h3>${proj.title}</h3>
         <p>${proj.desc}</p>
         <span class="project-page">Abrir Detalhes</span>
       </div>
     `;
-    
-    // Abrir o Modal de Projeto ao clicar
-    card.addEventListener('click', (e) => {
+    card.addEventListener("click", (e) => {
       e.preventDefault();
-      openProjectModal(proj);
+      openProjectModal(proj.id);
     });
-    
-    // Insere no grid existente
-    if (projectGrid) {
-      projectGrid.appendChild(card);
-    }
+    projectGrid.appendChild(card);
   });
 }
 
-// Salvar um novo Projeto
-if (adminForm) {
-  adminForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const imagesStr = document.getElementById('projImages').value;
-    
-    const newProject = {
-      title: document.getElementById('projTitle').value,
-      desc: document.getElementById('projDesc').value,
-      info: document.getElementById('projInfo').value,
-      link: document.getElementById('projLink').value,
-      images: imagesStr.split(',').map(s => s.trim()).filter(s => s !== '')
-    };
-    
-    customProjects.push(newProject);
-    localStorage.setItem('projetosPortifolio', JSON.stringify(customProjects));
-    
-    adminForm.reset();
-    closeModals();
-    renderCustomProjects();
-  });
-}
+// ===== Abrir modal de detalhes =====
+const projectModal = document.getElementById("projectModal");
+const modalTitle = document.getElementById("modalProjTitle");
+const modalInfo = document.getElementById("modalProjInfo");
+const modalLink = document.getElementById("modalProjLink");
+const mainImg = document.getElementById("mainCarouselImg");
+const thumbContainer = document.getElementById("carouselThumbnails");
 
-// Lógica de Renderização do Modal e Carrossel
-function openProjectModal(proj) {
-  document.getElementById('modalProjTitle').innerHTML = proj.title;
-  document.getElementById('modalProjInfo').innerHTML = proj.info.replace(/\n/g, '<br>');
-  
-  const linkBtn = document.getElementById('modalProjLink');
-  if(proj.link) {
-    linkBtn.style.display = 'inline-flex';
-    linkBtn.href = proj.link;
+function openProjectModal(projectId) {
+  const proj = projects.find(p => p.id === projectId);
+  if (!proj) return;
+
+  // Preencher informações
+  modalTitle.innerHTML = proj.title;
+  modalInfo.innerHTML = proj.info.replace(/\n/g, "<br>");
+  if (proj.link && proj.link.trim() !== "") {
+    modalLink.style.display = "inline-flex";
+    modalLink.href = proj.link;
   } else {
-    linkBtn.style.display = 'none';
+    modalLink.style.display = "none";
   }
 
-  const mainImg = document.getElementById('mainCarouselImg');
-  const thumbContainer = document.getElementById('carouselThumbnails');
-  
-  mainImg.src = proj.images[0] || '';
-  thumbContainer.innerHTML = '';
-  
-  proj.images.forEach((imgUrl, idx) => {
-    const thumb = document.createElement('img');
-    thumb.src = imgUrl;
-    if(idx === 0) thumb.classList.add('active');
-    
-    thumb.addEventListener('click', () => {
-      mainImg.src = imgUrl;
-      document.querySelectorAll('.thumbnails img').forEach(t => t.classList.remove('active'));
-      thumb.classList.add('active');
+  // Carrossel
+  const images = proj.images || [];
+  if (images.length === 0) {
+    mainImg.src = "";
+    thumbContainer.innerHTML = "<p style='color:var(--taupe);'>Nenhuma imagem disponível.</p>";
+    projectModal.style.display = "flex";
+    return;
+  }
+
+  mainImg.src = images[0].url;
+  thumbContainer.innerHTML = "";
+  images.forEach((img, idx) => {
+    const thumb = document.createElement("img");
+    thumb.src = img.url;
+    if (idx === 0) thumb.classList.add("active");
+    thumb.addEventListener("click", () => {
+      mainImg.src = img.url;
+      // Atualizar descrição? Sim, podemos mostrar a descrição da imagem na área de informações.
+      // Mas o modalInfo já contém a descrição geral. Vou adicionar um pequeno espaço para descrição da imagem.
+      // Como o pedido foi para mostrar a descrição de cada imagem, vou sobrescrever o modalInfo com a descrição da imagem.
+      // Mas o usuário quer que a descrição geral também seja exibida. Vou colocar a descrição da imagem abaixo do título.
+      // Para isso, vou modificar o modalInfo para incluir a descrição da imagem atual.
+      // Vou reestruturar: no modal, teremos o título, a descrição geral (info) e, abaixo, a descrição da imagem selecionada.
+      // Para simplificar, vou colocar a descrição da imagem no lugar do info, mas isso pode perder a info geral.
+      // Melhor: manter info geral e adicionar um elemento extra para a descrição da imagem.
+      // Vou criar um elemento #modalImageDesc no HTML.
+      const imgDesc = document.getElementById("modalImageDesc");
+      if (imgDesc) {
+        imgDesc.innerHTML = img.description || "";
+      }
+      document.querySelectorAll(".thumbnails img").forEach(t => t.classList.remove("active"));
+      thumb.classList.add("active");
     });
-    
     thumbContainer.appendChild(thumb);
   });
 
-  projectModal.style.display = 'flex';
+  // Adicionar descrição da primeira imagem
+  const imgDesc = document.getElementById("modalImageDesc");
+  if (imgDesc) {
+    imgDesc.innerHTML = images[0].description || "";
+  }
+
+  projectModal.style.display = "flex";
 }
 
-// Inicializar projetos criados pelo Admin
-renderCustomProjects();
+// ===== Fechar modal =====
+function closeProjectModal() {
+  projectModal.style.display = "none";
+}
+document.querySelector(".project-close-btn").addEventListener("click", closeProjectModal);
+window.addEventListener("click", (e) => {
+  if (e.target === projectModal) closeProjectModal();
+});
+
+// ===== Admin – verificar acesso (será chamado no admin.html) =====
+// Essa função é usada no admin.html para carregar a lista de projetos
+function getProjects() {
+  return projects;
+}
+function saveProjects(newProjects) {
+  projects = newProjects;
+  localStorage.setItem("projetosPortifolio", JSON.stringify(projects));
+  renderProjects();
+}
+
+// Inicializar renderização
+renderProjects();
+
+// ===== Adicionar um elemento para descrição da imagem no modal (HTML) =====
+// Como o modal já existe, vou adicionar via JavaScript
+document.addEventListener("DOMContentLoaded", () => {
+  const infoSide = document.querySelector(".project-info-side");
+  if (infoSide) {
+    const descDiv = document.createElement("div");
+    descDiv.id = "modalImageDesc";
+    descDiv.style.marginTop = "20px";
+    descDiv.style.color = "var(--cream)";
+    descDiv.style.fontSize = "0.95rem";
+    descDiv.style.lineHeight = "1.6";
+    descDiv.style.borderTop = "1px solid rgba(201,169,110,0.15)";
+    descDiv.style.paddingTop = "15px";
+    // Inserir depois do modalInfo
+    const info = document.getElementById("modalProjInfo");
+    if (info) {
+      info.after(descDiv);
+    }
+  }
+});

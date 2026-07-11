@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Gerenciar Projetos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Estilos herdados do site ===== */
+    :root {
+      --cream: #f5f0e8;
+      --warm-white: #faf7f2;
+      --sand: #d4c4a0;
+      --taupe: #a89880;
+      --mocha: #7a6553;
+      --deep: #3d2f22;
+      --charcoal: #2a2420;
+      --wood: #c4a882;
+      --accent: #b8956a;
+      --gold: #c9a96e;
+      --line: rgba(201, 169, 110, 0.16);
+      --panel: rgba(255, 255, 255, 0.02);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: var(--charcoal);
+      color: var(--cream);
+      font-family: "Jost", sans-serif;
+      font-weight: 300;
+      padding: 40px 20px;
+    }
+    .admin-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 3rem;
+      font-weight: 300;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .sub {
+      color: var(--taupe);
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+    }
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 40px;
+    }
+    @media (max-width: 900px) {
+      .admin-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Lista de projetos */
+    .project-list {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      padding: 20px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    .project-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .project-item:last-child { border-bottom: none; }
+    .project-item .info {
+      display: flex;
+      flex-direction: column;
+    }
+    .project-item .title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.2rem;
+      color: var(--cream);
+    }
+    .project-item .desc {
+      font-size: 0.85rem;
+      color: var(--taupe);
+    }
+    .project-item .actions button {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 4px 12px;
+      margin-left: 8px;
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: "Jost", sans-serif;
+    }
+    .project-item .actions button:hover {
+      background: var(--gold);
+      color: var(--charcoal);
+    }
+    .project-item .actions button.delete {
+      border-color: #b8956a;
+      color: #b8956a;
+    }
+    .project-item .actions button.delete:hover {
+      background: #b8956a;
+      color: var(--charcoal);
+    }
+
+    /* Formulário */
+    .form-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      padding: 30px;
+    }
+    .form-card h2 {
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 300;
+      font-size: 2rem;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 22px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--taupe);
+      margin-bottom: 6px;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--line);
+      padding: 10px 0;
+      color: var(--cream);
+      font-family: "Jost", sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--gold);
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .form-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .btn {
+      padding: 12px 32px;
+      border: 1px solid var(--gold);
+      background: transparent;
+      color: var(--gold);
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: "Jost", sans-serif;
+    }
+    .btn:hover {
+      background: var(--gold);
+      color: var(--charcoal);
+    }
+    .btn-secondary {
+      border-color: var(--taupe);
+      color: var(--taupe);
+    }
+    .btn-secondary:hover {
+      background: var(--taupe);
+      color: var(--charcoal);
+    }
+    .btn-danger {
+      border-color: #b8956a;
+      color: #b8956a;
+    }
+    .btn-danger:hover {
+      background: #b8956a;
+      color: var(--charcoal);
+    }
+
+    /* Upload de imagens */
+    .image-upload-area {
+      border: 1px dashed var(--line);
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.3s;
+      margin-bottom: 15px;
+    }
+    .image-upload-area:hover {
+      border-color: var(--gold);
+    }
+    .image-upload-area input[type="file"] {
+      display: none;
+    }
+    .image-preview-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 15px;
+    }
+    .image-preview-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(255,255,255,0.04);
+      padding: 10px;
+      border: 1px solid var(--line);
+    }
+    .image-preview-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+    .image-preview-item .desc-field {
+      flex: 1;
+    }
+    .image-preview-item .desc-field textarea {
+      width: 100%;
+      background: transparent;
+      border: 1px solid var(--line);
+      padding: 6px;
+      color: var(--cream);
+      font-family: "Jost", sans-serif;
+      font-size: 0.85rem;
+      resize: vertical;
+      min-height: 50px;
+    }
+    .image-preview-item .remove-img {
+      background: transparent;
+      border: none;
+      color: #b8956a;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0 8px;
+    }
+
+    /* Prévia modal */
+    .preview-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(42,36,32,0.85);
+      backdrop-filter: blur(12px);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .preview-modal .preview-content {
+      background: var(--charcoal);
+      border: 1px solid var(--gold);
+      max-width: 800px;
+      width: 100%;
+      padding: 30px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .preview-modal .close-preview {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 2rem;
+      color: var(--gold);
+      cursor: pointer;
+    }
+    .preview-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 25px;
+    }
+    .preview-grid img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+    }
+    .preview-info h3 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 2rem;
+      color: var(--cream);
+    }
+    .preview-info .desc {
+      color: var(--taupe);
+      margin: 10px 0;
+    }
+    .preview-info .info-text {
+      color: var(--cream);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* Status */
+    .status-msg {
+      margin-top: 15px;
+      padding: 10px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      display: none;
+    }
+    .status-msg.show { display: block; }
+  </style>
+</head>
+<body>
+<div class="admin-container">
+  <h1>🛠️ Admin – Projetos</h1>
+  <p class="sub">Gerencie os blocos do portfólio. As alterações são salvas no navegador.</p>
+
+  <div class="admin-grid">
+    <!-- Lista de projetos -->
+    <div>
+      <h2 style="font-family:'Cormorant Garamond',serif; font-weight:300; color:var(--gold); margin-bottom:15px;">Projetos existentes</h2>
+      <div class="project-list" id="projectList"></div>
+      <button class="btn" id="btnNew" style="margin-top:15px;">+ Criar Novo</button>
+    </div>
+
+    <!-- Formulário de edição/criação -->
+    <div class="form-card" id="formCard">
+      <h2 id="formTitle">Novo Projeto</h2>
+      <form id="adminForm">
+        <input type="hidden" id="editId" value="">
+
+        <div class="form-group">
+          <label>Título</label>
+          <input type="text" id="projTitle" required>
+        </div>
+        <div class="form-group">
+          <label>Descrição curta (subtítulo)</label>
+          <input type="text" id="projDesc" required>
+        </div>
+        <div class="form-group">
+          <label>Informações detalhadas (suporta HTML)</label>
+          <textarea id="projInfo" rows="4"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Link externo (opcional)</label>
+          <input type="url" id="projLink" placeholder="https://...">
+        </div>
+
+        <!-- Imagens -->
+        <div class="form-group">
+          <label>Imagens do projeto</label>
+          <div class="image-upload-area" id="uploadArea">
+            <p>Clique para selecionar imagens (múltiplas)</p>
+            <input type="file" id="fileInput" accept="image/*" multiple>
+          </div>
+          <div class="image-preview-list" id="imagePreviewList"></div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn" id="saveBtn">Salvar Projeto</button>
+          <button type="button" class="btn btn-secondary" id="previewBtn">Visualizar Prévia</button>
+          <button type="button" class="btn btn-danger" id="cancelBtn" style="display:none;">Cancelar</button>
+        </div>
+        <div class="status-msg" id="statusMsg"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Prévia -->
+<div class="preview-modal" id="previewModal">
+  <div class="preview-content">
+    <span class="close-preview" id="closePreview">&times;</span>
+    <div class="preview-grid">
+      <img id="previewImg" src="" alt="Prévia">
+      <div class="preview-info">
+        <h3 id="previewTitle">Título</h3>
+        <p class="desc" id="previewDesc">Descrição</p>
+        <div class="info-text" id="previewInfo">Informações</div>
+        <a id="previewLink" href="#" target="_blank" style="color:var(--gold); display:inline-block; margin-top:10px;">Link</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== Verificação de acesso =====
+(function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('admin') !== 'true') {
+    window.location.href = 'index.html';
+    return;
+  }
+  const senha = prompt("Acesso Restrito. Digite a senha do administrador:");
+  if (senha !== "CintiaDesign2026") {
+    alert("Senha incorreta. Acesso negado.");
+    window.location.href = 'index.html';
+  }
+})();
+
+// ===== Carregar projetos =====
+let projects = [];
+const stored = localStorage.getItem("projetosPortifolio");
+if (stored) {
+  try { projects = JSON.parse(stored); } catch(e) { projects = []; }
+} else {
+  // Dados padrão (exemplo) - o usuário pode deletar/editar
+  projects = [
+    { id: "p1", title: "Quarto", desc: "Estudo de ambiente residencial", info: "Ambiente tranquilo com iluminação natural.", link: "", images: [{ url: "https://online.fliphtml5.com/kbrbj/rznn/files/large/cd35dac653d9d420dbb732f9ae761d96.webp", description: "Vista geral" }] },
+    { id: "p2", title: "Sala", desc: "Proposta para espaço de convivência", info: "Integração entre sala e jantar.", link: "", images: [{ url: "https://online.fliphtml5.com/kbrbj/rznn/files/large/2640ced1c386f5b948d3e2caadd3833a.webp", description: "Vista ampla" }] }
+  ];
+  localStorage.setItem("projetosPortifolio", JSON.stringify(projects));
+}
+
+// ===== Referências DOM =====
+const listEl = document.getElementById("projectList");
+const form = document.getElementById("adminForm");
+const editId = document.getElementById("editId");
+const projTitle = document.getElementById("projTitle");
+const projDesc = document.getElementById("projDesc");
+const projInfo = document.getElementById("projInfo");
+const projLink = document.getElementById("projLink");
+const fileInput = document.getElementById("fileInput");
+const previewList = document.getElementById("imagePreviewList");
+const statusMsg = document.getElementById("statusMsg");
+const formTitle = document.getElementById("formTitle");
+const saveBtn = document.getElementById("saveBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+const previewBtn = document.getElementById("previewBtn");
+const previewModal = document.getElementById("previewModal");
+const closePreview = document.getElementById("closePreview");
+
+// ===== Estado das imagens (array de objetos {url, description}) =====
+let imageData = [];
+
+// ===== Renderizar lista de projetos =====
+function renderList() {
+  listEl.innerHTML = "";
+  projects.forEach((proj, idx) => {
+    const item = document.createElement("div");
+    item.className = "project-item";
+    item.innerHTML = `
+      <div class="info">
+        <span class="title">${proj.title}</span>
+        <span class="desc">${proj.desc} (${proj.images ? proj.images.length : 0} imagens)</span>
+      </div>
+      <div class="actions">
+        <button class="edit" data-id="${proj.id}">Editar</button>
+        <button class="delete" data-id="${proj.id}">Excluir</button>
+      </div>
+    `;
+    listEl.appendChild(item);
+  });
+
+  // Eventos dos botões
+  document.querySelectorAll(".edit").forEach(btn => {
+    btn.addEventListener("click", () => loadProject(btn.dataset.id));
+  });
+  document.querySelectorAll(".delete").forEach(btn => {
+    btn.addEventListener("click", () => deleteProject(btn.dataset.id));
+  });
+}
+
+// ===== Carregar projeto para edição =====
+function loadProject(id) {
+  const proj = projects.find(p => p.id === id);
+  if (!proj) return;
+  editId.value = proj.id;
+  projTitle.value = proj.title;
+  projDesc.value = proj.desc;
+  projInfo.value = proj.info || "";
+  projLink.value = proj.link || "";
+  imageData = proj.images ? proj.images.map(img => ({ url: img.url, description: img.description || "" })) : [];
+  renderImagePreviews();
+  formTitle.textContent = "Editar Projeto";
+  saveBtn.textContent = "Atualizar Projeto";
+  cancelBtn.style.display = "inline-block";
+  statusMsg.classList.remove("show");
+}
+
+// ===== Limpar formulário =====
+function resetForm() {
+  editId.value = "";
+  projTitle.value = "";
+  projDesc.value = "";
+  projInfo.value = "";
+  projLink.value = "";
+  imageData = [];
+  renderImagePreviews();
+  fileInput.value = "";
+  formTitle.textContent = "Novo Projeto";
+  saveBtn.textContent = "Salvar Projeto";
+  cancelBtn.style.display = "none";
+  statusMsg.classList.remove("show");
+}
+
+// ===== Renderizar previews das imagens =====
+function renderImagePreviews() {
+  previewList.innerHTML = "";
+  imageData.forEach((img, idx) => {
+    const div = document.createElement("div");
+    div.className = "image-preview-item";
+    div.innerHTML = `
+      <img src="${img.url}" alt="Imagem ${idx+1}">
+      <div class="desc-field">
+        <textarea placeholder="Descrição da imagem (suporta HTML)" rows="2">${img.description || ""}</textarea>
+      </div>
+      <button class="remove-img" data-idx="${idx}">✕</button>
+    `;
+    previewList.appendChild(div);
+  });
+
+  // Atualizar descrições ao digitar
+  previewList.querySelectorAll(".desc-field textarea").forEach((ta, idx) => {
+    ta.addEventListener("input", () => {
+      if (imageData[idx]) imageData[idx].description = ta.value;
+    });
+  });
+
+  // Remover imagem
+  previewList.querySelectorAll(".remove-img").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const idx = parseInt(btn.dataset.idx);
+      imageData.splice(idx, 1);
+      renderImagePreviews();
+    });
+  });
+}
+
+// ===== Upload de imagens =====
+document.getElementById("uploadArea").addEventListener("click", () => fileInput.click());
+fileInput.addEventListener("change", (e) => {
+  const files = e.target.files;
+  if (!files.length) return;
+  for (let f of files) {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      imageData.push({ url: ev.target.result, description: "" });
+      renderImagePreviews();
+    };
+    reader.readAsDataURL(f);
+  }
+  fileInput.value = "";
+});
+
+// ===== Salvar projeto =====
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const id = editId.value || Date.now().toString();
+  const newProj = {
+    id: id,
+    title: projTitle.value.trim(),
+    desc: projDesc.value.trim(),
+    info: projInfo.value,
+    link: projLink.value.trim(),
+    images: imageData
+  };
+
+  if (!newProj.title || !newProj.desc) {
+    statusMsg.textContent = "Preencha pelo menos o título e a descrição curta.";
+    statusMsg.classList.add("show");
+    return;
+  }
+  if (imageData.length === 0) {
+    statusMsg.textContent = "Adicione pelo menos uma imagem.";
+    statusMsg.classList.add("show");
+    return;
+  }
+
+  const existing = projects.findIndex(p => p.id === id);
+  if (existing !== -1) {
+    projects[existing] = newProj;
+  } else {
+    projects.push(newProj);
+  }
+  localStorage.setItem("projetosPortifolio", JSON.stringify(projects));
+  statusMsg.textContent = "Projeto salvo com sucesso!";
+  statusMsg.classList.add("show");
+  renderList();
+  resetForm();
+});
+
+// ===== Excluir projeto =====
+function deleteProject(id) {
+  if (!confirm("Tem certeza que deseja excluir este projeto?")) return;
+  projects = projects.filter(p => p.id !== id);
+  localStorage.setItem("projetosPortifolio", JSON.stringify(projects));
+  renderList();
+  if (editId.value === id) resetForm();
+}
+
+// ===== Cancelar edição =====
+cancelBtn.addEventListener("click", resetForm);
+
+// ===== Prévia do projeto =====
+previewBtn.addEventListener("click", () => {
+  const title = projTitle.value.trim() || "Título";
+  const desc = projDesc.value.trim() || "Descrição";
+  const info = projInfo.value || "Informações do projeto.";
+  const link = projLink.value.trim();
+  const firstImg = imageData.length > 0 ? imageData[0].url : "";
+
+  document.getElementById("previewTitle").textContent = title;
+  document.getElementById("previewDesc").textContent = desc;
+  document.getElementById("previewInfo").innerHTML = info.replace(/\n/g, "<br>");
+  document.getElementById("previewImg").src = firstImg || "";
+  const linkEl = document.getElementById("previewLink");
+  if (link) {
+    linkEl.href = link;
+    linkEl.style.display = "inline-block";
+  } else {
+    linkEl.style.display = "none";
+  }
+  previewModal.style.display = "flex";
+});
+
+closePreview.addEventListener("click", () => { previewModal.style.display = "none"; });
+previewModal.addEventListener("click", (e) => {
+  if (e.target === previewModal) previewModal.style.display = "none";
+});
+
+// ===== Botão Novo =====
+document.getElementById("btnNew").addEventListener("click", resetForm);
+
+// ===== Inicializar =====
+renderList();
+resetForm();
+</script>
+</body>
+</html>

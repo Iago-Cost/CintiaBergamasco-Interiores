@@ -1555,3 +1555,42 @@ body::after {
     padding: 30px 20px;
   }
 }
+
+/* --- Modais e carrossel (mantido) --- */
+
+/* Ajuste para remover barra de rolagem do modal de detalhes */
+.project-view-modal .modal-content {
+  max-width: 950px;
+  padding: 50px;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+.project-view-modal .modal-content::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Garantir que o conteúdo caiba sem scroll vertical excessivo */
+.project-modal-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 40px;
+  margin-top: 10px;
+  max-height: 70vh;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 900px) {
+  .project-modal-grid {
+    grid-template-columns: 1fr;
+    max-height: none;
+  }
+  #mainCarouselImg {
+    height: 300px;
+  }
+  .project-view-modal .modal-content {
+    padding: 30px 20px;
+  }
+}
+
+/* Estilos para o admin (serão incluídos no admin.html via <style>) */
