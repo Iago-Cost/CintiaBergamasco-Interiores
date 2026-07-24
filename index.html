@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cintia Bergamasco - Design de Interiores</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -17,72 +16,13 @@
   <div class="nav-logo">Cintia <span>Bergamasco</span></div>
   <ul class="nav-links">
     <li><a href="#filosofia">Sobre</a></li>
-    <li><a href="#servicos">Servi&ccedil;os</a></li>
+    <li><a href="#servicos">Serviços</a></li>
     <li><a href="#habilidades">Habilidades</a></li>
     <li><a href="#portfolio">Projetos</a></li>
-    <li><a href="#portfolio-access">Portf&oacute;lio</a></li>
+    <li><a href="#portfolio-access">Portfólio</a></li>
     <li><a href="#contato">Contato</a></li>
   </ul>
 </nav>
-
-<!-- ===== ADMIN PANEL (oculto inicialmente) ===== -->
-<section id="adminPanel" style="display:none; background:var(--deep); padding:60px 40px; border-bottom:2px solid var(--gold);">
-  <div class="admin-container" style="max-width:1400px; margin:0 auto;">
-    <h2 style="font-family:'Cormorant Garamond',serif; font-weight:300; color:var(--gold); font-size:2.5rem; margin-bottom:10px;">🛠️ Administração – Projetos</h2>
-    <p style="color:var(--taupe); margin-bottom:30px;">Gerencie os blocos do portfólio. As alterações são salvas na nuvem.</p>
-
-    <div style="display:grid; grid-template-columns:1fr 1.2fr; gap:40px;">
-      <!-- Lista de projetos -->
-      <div>
-        <h3 style="font-family:'Cormorant Garamond',serif; font-weight:300; color:var(--cream); margin-bottom:15px;">Projetos existentes</h3>
-        <div id="projectList" style="background:rgba(255,255,255,0.03); border:1px solid var(--line); padding:20px; max-height:60vh; overflow-y:auto;"></div>
-        <button id="btnNew" style="margin-top:15px; padding:12px 24px; border:1px solid var(--gold); background:transparent; color:var(--gold); font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; cursor:pointer; transition:0.3s;">+ Criar Novo</button>
-      </div>
-
-      <!-- Formulário -->
-      <div style="background:rgba(255,255,255,0.03); border:1px solid var(--line); padding:30px;">
-        <h3 id="formTitle" style="font-family:'Cormorant Garamond',serif; font-weight:300; color:var(--gold); font-size:1.8rem; margin-bottom:20px;">Novo Projeto</h3>
-        <form id="adminForm">
-          <input type="hidden" id="editId" value="">
-
-          <div class="form-group">
-            <label>Título</label>
-            <input type="text" id="projTitle" required>
-          </div>
-          <div class="form-group">
-            <label>Descrição curta (subtítulo)</label>
-            <input type="text" id="projDesc" required>
-          </div>
-          <div class="form-group">
-            <label>Informações detalhadas (suporta HTML)</label>
-            <textarea id="projInfo" rows="4"></textarea>
-          </div>
-          <div class="form-group">
-            <label>Link externo (opcional)</label>
-            <input type="url" id="projLink" placeholder="https://...">
-          </div>
-
-          <!-- Imagens -->
-          <div class="form-group">
-            <label>Imagens do projeto</label>
-            <div id="uploadArea" style="border:1px dashed var(--line); padding:20px; text-align:center; cursor:pointer; transition:border-color 0.3s;">
-              <p>Clique para selecionar imagens (múltiplas)</p>
-              <input type="file" id="fileInput" accept="image/*" multiple style="display:none;">
-            </div>
-            <div id="imagePreviewList" style="display:flex; flex-direction:column; gap:12px; margin-top:15px;"></div>
-          </div>
-
-          <div style="display:flex; gap:16px; margin-top:10px; flex-wrap:wrap;">
-            <button type="submit" class="form-submit" id="saveBtn" style="padding:12px 32px;">Salvar Projeto</button>
-            <button type="button" id="previewBtn" style="padding:12px 32px; border:1px solid var(--taupe); background:transparent; color:var(--taupe); font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; cursor:pointer;">Visualizar Prévia</button>
-            <button type="button" id="cancelBtn" style="display:none; padding:12px 32px; border:1px solid #b8956a; background:transparent; color:#b8956a; font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; cursor:pointer;">Cancelar</button>
-          </div>
-          <div id="statusMsg" style="margin-top:15px; padding:10px; border:1px solid var(--gold); color:var(--gold); display:none;"></div>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
 
 <section class="hero" id="hero">
   <div class="hero-bg"></div>
@@ -93,11 +33,11 @@
   <div class="hero-content">
     <p class="hero-eyebrow">Design de Interiores</p>
     <h1 class="hero-title">
-      Espa&ccedil;os com
-      <em>t&eacute;cnica</em>
+      Espaços com
+      <em>técnica</em>
       e identidade
     </h1>
-    <p class="hero-sub">Formada em Design de Interiores em 2025 e em atua&ccedil;&atilde;o na LB Arquitetura, desenvolvo propostas residenciais e comerciais com foco em modelagem 3D, detalhamento e renderiza&ccedil;&atilde;o.</p>
+    <p class="hero-sub">Formada em Design de Interiores em 2025 e em atuação na LB Arquitetura, desenvolvo propostas residenciais e comerciais com foco em modelagem 3D, detalhamento e renderização.</p>
 
     <div class="hero-actions">
       <div class="hero-scroll-indicator">
@@ -106,7 +46,7 @@
       </div>
       <div class="hero-button-row">
         <a href="#portfolio" class="hero-cta">Ver Projetos</a>
-        <a href="#portfolio-access" class="hero-secondary-link">Acessar Portf&oacute;lio</a>
+        <a href="https://online.fliphtml5.com/kbrbj/rznn/#p=1" target="_blank" rel="noopener noreferrer" class="hero-secondary-link">Acessar Portfólio</a>
       </div>
     </div>
   </div>
@@ -124,48 +64,40 @@
     <div class="marquee-item"><span>Enscape</span><span class="marquee-dot"></span></div>
     <div class="marquee-item"><span>Modelagem 3D</span><span class="marquee-dot"></span></div>
     <div class="marquee-item"><span>Detalhamento</span><span class="marquee-dot"></span></div>
-    <div class="marquee-item"><span>Renderiza&ccedil;&atilde;o</span><span class="marquee-dot"></span></div>
+    <div class="marquee-item"><span>Renderização</span><span class="marquee-dot"></span></div>
     <div class="marquee-item"><span>Projetos Residenciais</span><span class="marquee-dot"></span></div>
     <div class="marquee-item"><span>Ambientes Comerciais</span><span class="marquee-dot"></span></div>
     <div class="marquee-item"><span>Fachadas</span><span class="marquee-dot"></span></div>
-    <div class="marquee-item"><span>SketchUp</span><span class="marquee-dot"></span></div>
-    <div class="marquee-item"><span>Layout</span><span class="marquee-dot"></span></div>
-    <div class="marquee-item"><span>V-Ray</span><span class="marquee-dot"></span></div>
-    <div class="marquee-item"><span>Enscape</span><span class="marquee-dot"></span></div>
-    <div class="marquee-item"><span>Modelagem 3D</span><span class="marquee-dot"></span></div>
-    <div class="marquee-item"><span>Detalhamento</span><span class="marquee-dot"></span></div>
-    <div class="marquee-item"><span>Renderiza&ccedil;&atilde;o</span><span class="marquee-dot"></span></div>
   </div>
 </div>
 
 <section class="philosophy" id="filosofia">
   <div class="philosophy-text reveal">
     <p class="section-label">Sobre Mim</p>
-    <h2 class="section-title">Base t&eacute;cnica para criar ambientes com <em>presen&ccedil;a</em></h2>
-    <p>Formada em Design de Interiores em 2025 pela Faculdade Pit&aacute;goras Unopar Anhanguera, busco crescimento profissional em projetos nos quais minhas habilidades possam contribuir de forma efetiva e sens&iacute;vel.</p>
-    <p>Estudo constantemente para aprimorar processos, repert&oacute;rio visual e ferramentas digitais, mantendo meu trabalho alinhado com recursos atuais de representa&ccedil;&atilde;o, detalhamento e apresenta&ccedil;&atilde;o.</p>
-    <p>Meu interesse est&aacute; concentrado em modelagem 3D, detalhamento de interiores, decora&ccedil;&atilde;o de espa&ccedil;os internos e externos, propostas residenciais e comerciais e renderiza&ccedil;&atilde;o de imagens.</p>
+    <h2 class="section-title">Base técnica para criar ambientes com <em>presença</em></h2>
+    <p>Formada em Design de Interiores em 2025 pela Faculdade Pitágoras Unopar Anhanguera, busco crescimento profissional em projetos nos quais minhas habilidades possam contribuir de forma efetiva e sensível.</p>
+    <p>Estudo constantemente para aprimorar processos, repertório visual e ferramentas digitais, mantendo meu trabalho alinhado com recursos atuais de representação, detalhamento e apresentação.</p>
     <div class="philosophy-stats">
       <div class="stat-item reveal reveal-delay-1">
         <div class="stat-num">2025</div>
-        <div class="stat-label">Forma&ccedil;&atilde;o conclu&iacute;da</div>
+        <div class="stat-label">Formação concluída</div>
       </div>
       <div class="stat-item reveal reveal-delay-2">
         <div class="stat-num">LB Arquitetura</div>
-        <div class="stat-label">Experi&ecirc;ncia atual</div>
+        <div class="stat-label">Experiência atual</div>
       </div>
       <div class="stat-item reveal reveal-delay-3">
-        <div class="stat-num">7</div>
-        <div class="stat-label">Projetos no portf&oacute;lio</div>
+        <div class="stat-num" id="projetosCount">0</div>
+        <div class="stat-label">Projetos no portfólio</div>
       </div>
     </div>
   </div>
   <div class="philosophy-visual reveal reveal-delay-2">
     <div class="philo-img-1">
-      <img src="img/5.png" alt="Visualiza&ccedil;&atilde;o de quarto do portf&oacute;lio">
+      <img src="img/5.png" alt="Visualização de quarto do portfólio">
     </div>
     <div class="philo-img-2">
-      <img src="img/9.png" alt="Capa do portf&oacute;lio de Cintia Bergamasco">
+      <img src="img/9.png" alt="Capa do portfólio de Cintia Bergamasco">
     </div>
     <div class="philo-accent"></div>
   </div>
@@ -174,81 +106,26 @@
 <section class="services" id="servicos">
   <div class="services-heading reveal">
     <p class="section-label">O Que Desenvolvo</p>
-    <h2 class="section-title">Servi&ccedil;os com leitura est&eacute;tica, clareza t&eacute;cnica e apresenta&ccedil;&atilde;o refinada</h2>
-    <p class="services-intro">A partir das informa&ccedil;&otilde;es do portf&oacute;lio, a atua&ccedil;&atilde;o foi reorganizada em frentes mais objetivas e sofisticadas, conectando cria&ccedil;&atilde;o, visualiza&ccedil;&atilde;o e detalhamento.</p>
+    <h2 class="section-title">Serviços com leitura estética, clareza técnica e apresentação refinada</h2>
   </div>
   <div class="services-grid">
     <article class="service-card reveal">
       <span class="service-num">01</span>
-      <div class="service-icon" aria-hidden="true">
-        <svg viewBox="0 0 64 64">
-          <path d="M12 51h40M18 47V23l14-10 14 10v24M25 51V34h14v17"/>
-        </svg>
-      </div>
       <p class="service-kicker">Residencial</p>
       <h3 class="service-name">Projetos de interiores</h3>
-      <p class="service-desc">Concep&ccedil;&atilde;o de ambientes como quarto, sala, cozinha e apartamento com foco em funcionalidade, composi&ccedil;&atilde;o e identidade visual.</p>
+      <p class="service-desc">Concepção de ambientes como quarto, sala, cozinha e apartamento com foco em funcionalidade, composição e identidade visual.</p>
     </article>
-
     <article class="service-card reveal reveal-delay-1">
       <span class="service-num">02</span>
-      <div class="service-icon" aria-hidden="true">
-        <svg viewBox="0 0 64 64">
-          <path d="M14 50V18h36v32M24 50V30h16v20M50 50V24h-8"/>
-        </svg>
-      </div>
       <p class="service-kicker">Comercial</p>
       <h3 class="service-name">Ambientes profissionais</h3>
-      <p class="service-desc">Desenvolvimento de propostas para cl&iacute;nicas, espa&ccedil;os de atendimento e fachadas com linguagem visual coerente e atmosfera acolhedora.</p>
+      <p class="service-desc">Desenvolvimento de propostas para clínicas, espaços de atendimento e fachadas com linguagem visual coerente e atmosfera acolhedora.</p>
     </article>
-
     <article class="service-card reveal reveal-delay-2">
       <span class="service-num">03</span>
-      <div class="service-icon" aria-hidden="true">
-        <svg viewBox="0 0 64 64">
-          <path d="M13 44l19-11 19 11-19 11-19-11ZM13 20l19-11 19 11-19 11-19-11ZM13 32l19-11 19 11"/>
-        </svg>
-      </div>
       <p class="service-kicker">Modelagem</p>
-      <h3 class="service-name">Visualiza&ccedil;&atilde;o 3D</h3>
-      <p class="service-desc">Estudos volum&eacute;tricos e simula&ccedil;&otilde;es espaciais em 3D para facilitar leitura do projeto, aprova&ccedil;&atilde;o e seguran&ccedil;a nas decis&otilde;es.</p>
-    </article>
-
-    <article class="service-card reveal reveal-delay-1">
-      <span class="service-num">04</span>
-      <div class="service-icon" aria-hidden="true">
-        <svg viewBox="0 0 64 64">
-          <path d="M14 16h36v32H14zM22 24h20M22 32h20M22 40h10M50 16l-8 8"/>
-        </svg>
-      </div>
-      <p class="service-kicker">Detalhamento</p>
-      <h3 class="service-name">Layout e documenta&ccedil;&atilde;o</h3>
-      <p class="service-desc">Organiza&ccedil;&atilde;o de layout, comunica&ccedil;&atilde;o de ideias e detalhamento para deixar a proposta mais clara, execut&aacute;vel e bem apresentada.</p>
-    </article>
-
-    <article class="service-card reveal reveal-delay-2">
-      <span class="service-num">05</span>
-      <div class="service-icon" aria-hidden="true">
-        <svg viewBox="0 0 64 64">
-          <circle cx="24" cy="24" r="9"/>
-          <path d="M37 17h14v14M31 33l20 20M13 51h18"/>
-        </svg>
-      </div>
-      <p class="service-kicker">Imagem</p>
-      <h3 class="service-name">Renderiza&ccedil;&atilde;o de cenas</h3>
-      <p class="service-desc">Produ&ccedil;&atilde;o de imagens para comunicar materialidade, ilumina&ccedil;&atilde;o e atmosfera com mais impacto visual nas apresenta&ccedil;&otilde;es.</p>
-    </article>
-
-    <article class="service-card reveal reveal-delay-3">
-      <span class="service-num">06</span>
-      <div class="service-icon" aria-hidden="true">
-        <svg viewBox="0 0 64 64">
-          <path d="M19 45c0-7 5-12 13-12s13 5 13 12M23 24c0-5 4-9 9-9s9 4 9 9M12 52h40"/>
-        </svg>
-      </div>
-      <p class="service-kicker">Suporte criativo</p>
-      <h3 class="service-name">Curadoria de conceito</h3>
-      <p class="service-desc">Apoio na defini&ccedil;&atilde;o de linguagem visual, refer&ecirc;ncias, composi&ccedil;&atilde;o e uso de ferramentas digitais para acelerar estudos e alternativas.</p>
+      <h3 class="service-name">Visualização 3D</h3>
+      <p class="service-desc">Estudos volumétricos e simulações espaciais em 3D para facilitar leitura do projeto, aprovação e segurança nas decisões.</p>
     </article>
   </div>
 </section>
@@ -257,78 +134,50 @@
   <div class="skills-copy reveal">
     <p class="section-label">Habilidades</p>
     <h2 class="section-title">Ferramentas que sustentam o processo do conceito ao <em>render</em></h2>
-    <p>As habilidades presentes no portf&oacute;lio foram transformadas em uma se&ccedil;&atilde;o pr&oacute;pria para destacar a base t&eacute;cnica por tr&aacute;s das propostas desenvolvidas.</p>
     <div class="skills-focus">
       <span>Modelagem 3D</span>
       <span>Detalhamento</span>
-      <span>Decora&ccedil;&atilde;o</span>
-      <span>Interiores residenciais</span>
-      <span>Interiores comerciais</span>
-      <span>Renderiza&ccedil;&atilde;o</span>
-    </div>
-    <div class="experience-card reveal reveal-delay-2">
-      <span class="experience-label">Experi&ecirc;ncia atual</span>
-      <h3>LB Arquitetura</h3>
-      <p>Est&aacute;gio iniciado em maio de 2025, com contato direto com rotina de projeto, desenvolvimento de solu&ccedil;&otilde;es e aprofundamento t&eacute;cnico.</p>
+      <span>Renderização</span>
     </div>
   </div>
-
   <div class="skills-grid">
     <article class="skill-card reveal">
       <span class="skill-index">01</span>
       <h3>SketchUp</h3>
-      <p>Modelagem de espa&ccedil;os, volumetria e organiza&ccedil;&atilde;o visual do projeto.</p>
+      <p>Modelagem de espaços, volumetria e organização visual do projeto.</p>
     </article>
     <article class="skill-card reveal reveal-delay-1">
       <span class="skill-index">02</span>
-      <h3>Layout</h3>
-      <p>Pranchas, apresenta&ccedil;&atilde;o t&eacute;cnica e estrutura&ccedil;&atilde;o do material de projeto.</p>
-    </article>
-    <article class="skill-card reveal reveal-delay-2">
-      <span class="skill-index">03</span>
-      <h3>V-Ray</h3>
+      <h3>V-Ray & Enscape</h3>
       <p>Imagens de apoio para leitura de materiais, luz e acabamento.</p>
-    </article>
-    <article class="skill-card reveal reveal-delay-1">
-      <span class="skill-index">04</span>
-      <h3>Enscape</h3>
-      <p>Visualiza&ccedil;&otilde;es &aacute;geis e apresenta&ccedil;&otilde;es com mais imers&atilde;o espacial.</p>
-    </article>
-    <article class="skill-card reveal reveal-delay-2">
-      <span class="skill-index">05</span>
-      <h3>Intelig&ecirc;ncia Artificial</h3>
-      <p>Apoio em pesquisa visual, organiza&ccedil;&atilde;o de refer&ecirc;ncias e explora&ccedil;&atilde;o de alternativas.</p>
     </article>
   </div>
 </section>
 
-<!-- ===== SEÇÃO PORTFÓLIO (dinâmica) ===== -->
 <section class="portfolio" id="portfolio">
   <div class="portfolio-header">
     <div>
       <p class="section-label reveal">Projetos do Portfólio</p>
       <h2 class="section-title reveal">Estudos selecionados para leitura rápida e acesso por <em>página</em></h2>
     </div>
-    <a href="https://online.fliphtml5.com/kbrbj/rznn/#p=1" class="portfolio-link reveal" target="_blank" rel="noreferrer">Abrir flipbook completo</a>
   </div>
 
-  <div class="project-grid" id="projectGrid"></div>
-
+  <!-- GRID DINÂMICO DOS PROJETOS -->
+  <div class="project-grid" id="dynamicProjectGrid"></div>
 </section>
 
-<!-- Seção de acesso ao portfólio (mantida) -->
 <section class="portfolio-access" id="portfolio-access">
   <div class="portfolio-access-card reveal">
     <div class="portfolio-access-copy">
-      <p class="section-label">Acesso ao Portfólio</p>
-      <h2 class="section-title">Disponibilize a versão completa para quem quiser ver o material na <em>íntegra</em></h2>
-      <p>Foi adicionado um bloco dedicado para acesso ao portfólio original, facilitando a navegação de clientes, recrutadores e parceiros que desejarem visualizar todas as páginas do material.</p>
+      <p class="section-label">Acesso ao Portf&oacute;lio</p>
+      <h2 class="section-title">Disponibilize a vers&atilde;o completa para quem quiser ver o material na <em>&iacute;ntegra</em></h2>
+      <p>Foi adicionado um bloco dedicado para acesso ao portf&oacute;lio original, facilitando a navega&ccedil;&atilde;o de clientes, recrutadores e parceiros que desejarem visualizar todas as p&aacute;ginas do material.</p>
       <div class="portfolio-access-actions">
-        <a href="https://online.fliphtml5.com/kbrbj/rznn/#p=1" target="_blank" rel="noreferrer" class="hero-cta">Abrir Portfólio</a>
+        <a href="https://online.fliphtml5.com/kbrbj/rznn/#p=1" target="_blank" rel="noreferrer" class="hero-cta">Abrir Portf&oacute;lio</a>
       </div>
     </div>
     <div class="portfolio-access-preview">
-      <img src="https://online.fliphtml5.com/kbrbj/rznn/files/large/28ecaf6d7c5b118c791d10b07eaf3238.webp?1774227272" alt="Preview da capa do portfólio">
+      <img src="https://online.fliphtml5.com/kbrbj/rznn/files/large/28ecaf6d7c5b118c791d10b07eaf3238.webp?1774227272" alt="Preview da capa do portf&oacute;lio">
     </div>
   </div>
 </section>
@@ -420,67 +269,48 @@
   </form>
 </section>
 
-<!-- Modal do Painel Admin -->
-<div id="adminModal" class="custom-modal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <h2 class="section-title">Adicionar <em>Projeto</em></h2>
-    <form id="adminForm" style="margin-top: 30px;">
-      <div class="form-group">
-        <label>Título do Bloco (ex: Quarto)</label>
-        <input type="text" id="projTitle" required>
-      </div>
-      <div class="form-group">
-        <label>Descrição Curta (Subtítulo)</label>
-        <input type="text" id="projDesc" required>
-      </div>
-      <div class="form-group">
-        <label>Informações do Ambiente</label>
-        <textarea id="projInfo" required></textarea>
-      </div>
-      <div class="form-group">
-        <label>Link Externo (Opcional)</label>
-        <input type="url" id="projLink" placeholder="https://...">
-      </div>
-      <div class="form-group">
-        <label>URLs das Imagens (Separadas por vírgula)</label>
-        <textarea id="projImages" placeholder="url1.jpg, url2.jpg" required></textarea>
-      </div>
-      <button type="submit" class="form-submit">Criar Bloco</button>
-    </form>
-  </div>
-</div>
-
-<!-- ===== MODAL DE VISUALIZAÇÃO DO PROJETO ===== -->
+<!-- Modal de Visualização do Projeto Otimizado -->
 <div id="projectModal" class="custom-modal project-view-modal">
   <div class="modal-content project-card-content">
     <span class="close-btn project-close-btn">&times;</span>
     <div class="project-modal-grid">
-
+      <!-- Carrossel com Setas e Layout Flex -->
       <div class="carousel-container">
-        <img id="mainCarouselImg" src="" alt="Imagem Principal">
+        <div class="image-viewer-layout">
+          <button type="button" class="carousel-nav carousel-prev" id="prevImageBtn" style="display:none;">&#10094;</button>
+          
+          <div class="main-img-wrapper">
+            <img id="mainCarouselImg" src="" alt="Imagem Principal">
+            <button type="button" id="zoomBtn" class="zoom-btn" title="Ampliar imagem">&#x26F6;</button>
+          </div>
+          
+          <button type="button" class="carousel-nav carousel-next" id="nextImageBtn" style="display:none;">&#10095;</button>
+        </div>
         <div class="thumbnails" id="carouselThumbnails"></div>
       </div>
-
+      <!-- Informações dinâmicas e HTML rendering -->
       <div class="project-info-side">
         <h2 id="modalProjTitle" class="section-title"></h2>
-        <div id="modalProjInfo" class="service-desc" style="color: var(--taupe); line-height: 1.8;"></div>
-        <div id="modalImageDesc" style="margin-top:20px; color:var(--cream); font-size:0.95rem; line-height:1.6; border-top:1px solid rgba(201,169,110,0.15); padding-top:15px;"></div>
-        <a id="modalProjLink" href="#" target="_blank" class="hero-cta" style="margin-top:10px; width:fit-content;">Acessar Link</a>
+        <div class="image-desc-container" id="modalImageDesc"></div>
+        <a id="modalProjLink" href="#" target="_blank" class="hero-cta" style="margin-top: auto; width: fit-content;">Acessar Link</a>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Modal de Zoom da Imagem -->
+<div id="zoomModal" class="custom-modal" style="z-index: 2000;">
+  <span class="close-btn" id="closeZoomBtn">&times;</span>
+  <img id="zoomModalImg" src="" alt="Imagem Ampliada" style="max-width: 90vw; max-height: 90vh; object-fit: contain; border: 1px solid var(--gold); border-radius: 4px; background: var(--charcoal);">
+</div>
+
 <footer>
   <div class="footer-logo">Cintia <span>Bergamasco</span></div>
   <p class="footer-copy">&copy; 2026 Cintia Bergamasco - Design de Interiores</p>
-  <div class="footer-social">
-    <a href="https://online.fliphtml5.com/kbrbj/rznn/#p=1" target="_blank" rel="noreferrer">Portf&oacute;lio</a>
-    <a href="mailto:yago.454567@gmail.com">E-mail</a>
-    <a href="https://wa.me/5519998087720" target="_blank" rel="noreferrer">WhatsApp</a>
-  </div>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="script.js"></script>
 </body>
 </html>
